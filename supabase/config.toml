@@ -1,0 +1,4 @@
+project_id = "ktdqwddtgsgnzbhhnogj"
+
+[functions.analyze-emotion]
+verify_jwt = true
