@@ -5,8 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, LogOut, PenLine, Sparkles, Loader2 } from "lucide-react";
+import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2 } from "lucide-react";
 import DiaryEntry from "@/components/DiaryEntry";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Session } from "@supabase/supabase-js";
 
 interface DiaryEntryData {
@@ -126,6 +137,56 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteEntry = async (entryId: string) => {
+    try {
+      const { error } = await supabase
+        .from("diary_entries")
+        .delete()
+        .eq("id", entryId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Entrada apagada!",
+        description: "A entrada foi removida com sucesso.",
+      });
+
+      fetchEntries();
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Não foi possível apagar a entrada.",
+      });
+    }
+  };
+
+  const handleDeleteAllEntries = async () => {
+    if (!session) return;
+
+    try {
+      const { error } = await supabase
+        .from("diary_entries")
+        .delete()
+        .eq("user_id", session.user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Todas as entradas apagadas!",
+        description: "O seu diário foi limpo com sucesso.",
+      });
+
+      setEntries([]);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Não foi possível apagar as entradas.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-secondary/20 to-background">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
@@ -202,7 +263,40 @@ const Dashboard = () => {
         </Card>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">As suas entradas</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">As suas entradas</h2>
+            {entries.length > 0 && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Apagar todas
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Tem a certeza?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta ação não pode ser revertida. Todas as suas entradas do diário serão permanentemente apagadas.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleDeleteAllEntries}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Apagar todas
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+          </div>
           {entries.length === 0 ? (
             <Card className="border-border/50">
               <CardContent className="p-12 text-center">
@@ -220,10 +314,12 @@ const Dashboard = () => {
               {entries.map((entry) => (
                 <DiaryEntry
                   key={entry.id}
+                  id={entry.id}
                   content={entry.content}
                   emotionSummary={entry.emotion_summary}
                   emotionTags={entry.emotion_tags}
                   createdAt={entry.created_at}
+                  onDelete={handleDeleteEntry}
                 />
               ))}
             </div>
