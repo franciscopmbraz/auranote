@@ -1,9 +1,8 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
+import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { TrendingUp, Calendar, Heart, Smile } from "lucide-react";
-import { format, subDays, startOfDay } from "date-fns";
+import { format, subDays } from "date-fns";
 import { pt } from "date-fns/locale";
 
 interface DiaryEntryData {
@@ -89,7 +88,7 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
       topEmotionCount: topEmotion ? topEmotion[1] : 0,
       pieData,
       lineData,
-      allEmotions: Object.keys(emotionCount),
+      emotionCount,
     };
   }, [entries]);
 
@@ -107,15 +106,9 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
     );
   }
 
-  const chartConfig = {
-    ...stats.allEmotions.reduce((acc, emotion) => {
-      acc[emotion] = {
-        label: emotion.charAt(0).toUpperCase() + emotion.slice(1),
-        color: EMOTION_COLORS[emotion] || EMOTION_COLORS.default,
-      };
-      return acc;
-    }, {} as any),
-  };
+  const topEmotions = Object.keys(stats.emotionCount)
+    .sort((a, b) => stats.emotionCount[b] - stats.emotionCount[a])
+    .slice(0, 5);
 
   return (
     <div className="space-y-6">
@@ -167,21 +160,28 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
             <CardDescription>Últimos 7 dias</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height={300}>
               <LineChart data={stats.lineData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis 
                   dataKey="date" 
-                  className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))" }}
+                  style={{ fontSize: "12px" }}
+                  stroke="hsl(var(--muted-foreground))"
                 />
                 <YAxis 
-                  className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))" }}
+                  style={{ fontSize: "12px" }}
+                  stroke="hsl(var(--muted-foreground))"
                 />
-                <ChartTooltip content={<ChartTooltipContent />} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                    color: "hsl(var(--card-foreground))"
+                  }}
+                />
                 <Legend wrapperStyle={{ fontSize: "12px" }} />
-                {stats.allEmotions.slice(0, 5).map((emotion) => (
+                {topEmotions.map((emotion) => (
                   <Line
                     key={emotion}
                     type="monotone"
@@ -193,7 +193,7 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
                   />
                 ))}
               </LineChart>
-            </ChartContainer>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
@@ -207,7 +207,7 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
             <CardDescription>Top 6 emoções mais frequentes</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
                   data={stats.pieData}
@@ -215,16 +215,23 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
                   cy="50%"
                   labelLine={false}
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  outerRadius={100}
                   dataKey="value"
                 >
                   {stats.pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                    color: "hsl(var(--card-foreground))"
+                  }}
+                />
               </PieChart>
-            </ChartContainer>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
