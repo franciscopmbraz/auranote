@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3 } from "lucide-react";
+import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3, Mic, MicOff } from "lucide-react";
 import DiaryEntry from "@/components/DiaryEntry";
 import EmotionsDashboard from "@/components/EmotionsDashboard";
 import {
@@ -38,6 +38,8 @@ const Dashboard = () => {
   const [entries, setEntries] = useState<DiaryEntryData[]>([]);
   const [loading, setLoading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<any>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -59,6 +61,37 @@ const Dashboard = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  useEffect(() => {
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const rec = new SpeechRecognition();
+      rec.lang = 'pt-PT';
+      rec.continuous = false;
+      rec.interimResults = false;
+
+      rec.onresult = (e: any) => {
+        const transcript = e.results[0][0].transcript;
+        setContent(prev => prev ? `${prev} ${transcript}` : transcript);
+        setIsListening(false);
+      };
+
+      rec.onerror = () => {
+        setIsListening(false);
+        toast({
+          variant: "destructive",
+          title: "Erro no reconhecimento de voz",
+          description: "Não foi possível captar a sua voz. Tente novamente.",
+        });
+      };
+
+      rec.onend = () => {
+        setIsListening(false);
+      };
+
+      setRecognition(rec);
+    }
+  }, [toast]);
 
   const fetchEntries = async () => {
     try {
@@ -189,6 +222,25 @@ const Dashboard = () => {
     }
   };
 
+  const toggleVoiceRecognition = () => {
+    if (!recognition) {
+      toast({
+        variant: "destructive",
+        title: "Não suportado",
+        description: "O seu navegador não suporta reconhecimento de voz.",
+      });
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      recognition.start();
+      setIsListening(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-secondary/20 to-background">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
@@ -254,24 +306,51 @@ const Dashboard = () => {
                           A analisar emoções...
                         </>
                       )}
-                    </p>
-                    <Button
-                      type="submit"
-                      disabled={!content.trim() || loading || analyzing}
-                      className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] gap-2"
-                    >
-                      {loading || analyzing ? (
+                      {isListening && (
                         <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          A processar...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-4 w-4" />
-                          Guardar e Analisar
+                          <Mic className="h-4 w-4 animate-pulse text-primary" />
+                          A ouvir...
                         </>
                       )}
-                    </Button>
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        onClick={toggleVoiceRecognition}
+                        disabled={loading || analyzing}
+                        variant={isListening ? "secondary" : "outline"}
+                        className="gap-2 transition-all duration-300"
+                      >
+                        {isListening ? (
+                          <>
+                            <MicOff className="h-4 w-4" />
+                            Parar
+                          </>
+                        ) : (
+                          <>
+                            <Mic className="h-4 w-4" />
+                            Falar
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={!content.trim() || loading || analyzing}
+                        className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] gap-2"
+                      >
+                        {loading || analyzing ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            A processar...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="h-4 w-4" />
+                            Guardar e Analisar
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 </form>
               </CardContent>
