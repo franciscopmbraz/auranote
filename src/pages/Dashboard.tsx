@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2 } from "lucide-react";
+import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3 } from "lucide-react";
 import DiaryEntry from "@/components/DiaryEntry";
+import EmotionsDashboard from "@/components/EmotionsDashboard";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -209,60 +211,73 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl space-y-8">
-        <Card className="shadow-[var(--shadow-medium)] border-border/50">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <PenLine className="h-5 w-5 text-primary" />
-              <CardTitle>Escrever nova entrada</CardTitle>
-            </div>
-            <CardDescription>
-              Partilhe os seus pensamentos e sentimentos de hoje
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Textarea
-                placeholder="Como se sentiu hoje? Escreva livremente sobre o seu dia..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={8}
-                className="resize-none transition-all focus:shadow-[var(--shadow-soft)]"
-                disabled={loading || analyzing}
-              />
+      <main className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
+        <Tabs defaultValue="write" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
+            <TabsTrigger value="write" className="gap-2">
+              <PenLine className="h-4 w-4" />
+              Escrever
+            </TabsTrigger>
+            <TabsTrigger value="dashboard" className="gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Dashboard
+            </TabsTrigger>
+          </TabsList>
 
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground flex items-center gap-2">
-                  {analyzing && (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      A analisar emoções...
-                    </>
-                  )}
-                </p>
-                <Button
-                  type="submit"
-                  disabled={!content.trim() || loading || analyzing}
-                  className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] gap-2"
-                >
-                  {loading || analyzing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      A processar...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4" />
-                      Guardar e Analisar
-                    </>
-                  )}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+          <TabsContent value="write" className="space-y-8">
+            <Card className="shadow-[var(--shadow-medium)] border-border/50">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <PenLine className="h-5 w-5 text-primary" />
+                  <CardTitle>Escrever nova entrada</CardTitle>
+                </div>
+                <CardDescription>
+                  Partilhe os seus pensamentos e sentimentos de hoje
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <Textarea
+                    placeholder="Como se sentiu hoje? Escreva livremente sobre o seu dia..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    rows={8}
+                    className="resize-none transition-all focus:shadow-[var(--shadow-soft)]"
+                    disabled={loading || analyzing}
+                  />
 
-        <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-muted-foreground flex items-center gap-2">
+                      {analyzing && (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          A analisar emoções...
+                        </>
+                      )}
+                    </p>
+                    <Button
+                      type="submit"
+                      disabled={!content.trim() || loading || analyzing}
+                      className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] gap-2"
+                    >
+                      {loading || analyzing ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          A processar...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4" />
+                          Guardar e Analisar
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-semibold">As suas entradas</h2>
             {entries.length > 0 && (
@@ -324,7 +339,13 @@ const Dashboard = () => {
               ))}
             </div>
           )}
-        </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="dashboard">
+            <EmotionsDashboard entries={entries} />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
