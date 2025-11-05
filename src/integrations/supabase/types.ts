@@ -70,6 +70,45 @@ export type Database = {
         }
         Relationships: []
       }
+      summaries: {
+        Row: {
+          additional_email: string | null
+          created_at: string
+          email: string
+          end_date: string
+          entries_data: Json
+          id: string
+          period: string
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_email?: string | null
+          created_at?: string
+          email: string
+          end_date: string
+          entries_data: Json
+          id?: string
+          period: string
+          start_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_email?: string | null
+          created_at?: string
+          email?: string
+          end_date?: string
+          entries_data?: Json
+          id?: string
+          period?: string
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

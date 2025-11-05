@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3, Mic, MicOff } from "lucide-react";
 import DiaryEntry from "@/components/DiaryEntry";
 import EmotionsDashboard from "@/components/EmotionsDashboard";
+import SummaryDialog from "@/components/SummaryDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -272,15 +273,23 @@ const Dashboard = () => {
             </div>
             <h1 className="text-2xl font-bold text-gradient">Diário Emocional</h1>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSignOut}
-            className="gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Sair
-          </Button>
+          <div className="flex items-center gap-2">
+            {session?.user && (
+              <SummaryDialog 
+                userEmail={session.user.email || ""} 
+                userId={session.user.id}
+              />
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
+            </Button>
+          </div>
         </div>
       </header>
 
