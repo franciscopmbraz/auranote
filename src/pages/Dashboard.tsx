@@ -40,6 +40,7 @@ const Dashboard = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
+  const [showEmotionalAlert, setShowEmotionalAlert] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -102,8 +103,28 @@ const Dashboard = () => {
 
       if (error) throw error;
       setEntries(data || []);
+      checkNegativeEntries(data || []);
     } catch (error: any) {
       console.error("Error fetching entries:", error);
+    }
+  };
+
+  const checkNegativeEntries = (entriesData: DiaryEntryData[]) => {
+    const negativeEmotions = ["tristeza", "ansiedade", "medo", "raiva", "frustração", "desespero"];
+    
+    // Check the last 3 entries
+    const recentEntries = entriesData.slice(0, 3);
+    
+    if (recentEntries.length >= 3) {
+      const consecutiveNegative = recentEntries.every(entry => 
+        entry.emotion_tags?.some(tag => 
+          negativeEmotions.some(neg => tag.toLowerCase().includes(neg))
+        )
+      );
+      
+      if (consecutiveNegative) {
+        setShowEmotionalAlert(true);
+      }
     }
   };
 
@@ -426,6 +447,39 @@ const Dashboard = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      <AlertDialog open={showEmotionalAlert} onOpenChange={setShowEmotionalAlert}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-warning">
+              <Brain className="h-5 w-5" />
+              Alerta de Bem-Estar Emocional
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3 pt-2">
+              <p>
+                Detetámos que as suas últimas 3 entradas contêm emoções negativas persistentes.
+              </p>
+              <p className="font-medium text-foreground">
+                A sua saúde emocional é importante. Considere:
+              </p>
+              <ul className="list-disc list-inside space-y-1 text-sm">
+                <li>Falar com alguém de confiança</li>
+                <li>Praticar atividades que lhe dão prazer</li>
+                <li>Procurar apoio profissional se necessário</li>
+                <li>Fazer uma pausa e cuidar de si</li>
+              </ul>
+              <p className="text-xs italic text-muted-foreground pt-2">
+                Lembre-se: pedir ajuda é um sinal de força, não de fraqueza.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowEmotionalAlert(false)}>
+              Compreendo
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
