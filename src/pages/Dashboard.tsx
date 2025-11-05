@@ -110,7 +110,7 @@ const Dashboard = () => {
   };
 
   const checkNegativeEntries = (entriesData: DiaryEntryData[]) => {
-    const negativeEmotions = ["tristeza", "ansiedade", "medo", "raiva", "frustração", "desespero"];
+    const negativeEmotions = ["triste", "tristeza", "ansiedade", "ansioso", "medo", "raiva", "frustração", "frustrado", "desespero", "desesperado", "preocupado", "cansado"];
     
     // Check the last 3 entries
     const recentEntries = entriesData.slice(0, 3);
