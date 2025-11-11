@@ -8,50 +8,50 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Cores suaves e calmantes para bem-estar mental */
-    --background: 250 60% 98%;
-    --foreground: 250 15% 15%;
+    /* Paleta AURA NOTE - Bege creme e Navy */
+    --background: 40 35% 92%;
+    --foreground: 210 35% 17%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 250 15% 15%;
+    --card: 40 30% 96%;
+    --card-foreground: 210 35% 17%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 250 15% 15%;
+    --popover: 40 30% 96%;
+    --popover-foreground: 210 35% 17%;
 
-    /* Roxo suave principal */
-    --primary: 265 60% 65%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 265 70% 85%;
-    --primary-dark: 265 50% 45%;
+    /* Navy principal do logo */
+    --primary: 210 35% 17%;
+    --primary-foreground: 40 35% 92%;
+    --primary-light: 210 30% 35%;
+    --primary-dark: 210 40% 12%;
 
-    /* Azul calmante secundário */
-    --secondary: 220 50% 95%;
-    --secondary-foreground: 220 30% 30%;
+    /* Bege secundário */
+    --secondary: 40 25% 85%;
+    --secondary-foreground: 210 35% 17%;
 
-    --muted: 250 30% 96%;
-    --muted-foreground: 250 10% 45%;
+    --muted: 40 20% 88%;
+    --muted-foreground: 210 20% 45%;
 
-    /* Verde suave para estados positivos */
-    --accent: 160 55% 70%;
-    --accent-foreground: 160 40% 20%;
+    /* Accent suave */
+    --accent: 35 40% 75%;
+    --accent-foreground: 210 35% 17%;
 
-    --destructive: 0 75% 60%;
+    --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 250 20% 90%;
-    --input: 250 20% 90%;
-    --ring: 265 60% 65%;
+    --border: 40 20% 82%;
+    --input: 40 20% 82%;
+    --ring: 210 35% 17%;
 
     --radius: 1rem;
 
-    /* Gradientes suaves */
-    --gradient-primary: linear-gradient(135deg, hsl(265 60% 65%) 0%, hsl(250 55% 75%) 100%);
-    --gradient-calm: linear-gradient(180deg, hsl(250 60% 98%) 0%, hsl(240 50% 96%) 100%);
+    /* Gradientes com paleta AURA NOTE */
+    --gradient-primary: linear-gradient(135deg, hsl(210 35% 17%) 0%, hsl(210 30% 30%) 100%);
+    --gradient-calm: linear-gradient(180deg, hsl(40 35% 92%) 0%, hsl(40 30% 88%) 100%);
     
     /* Sombras elegantes */
-    --shadow-soft: 0 4px 20px hsla(265, 60%, 65%, 0.08);
-    --shadow-medium: 0 8px 30px hsla(265, 60%, 65%, 0.12);
-    --shadow-strong: 0 12px 40px hsla(265, 60%, 65%, 0.16);
+    --shadow-soft: 0 4px 20px hsla(210, 35%, 17%, 0.08);
+    --shadow-medium: 0 8px 30px hsla(210, 35%, 17%, 0.12);
+    --shadow-strong: 0 12px 40px hsla(210, 35%, 17%, 0.16);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -63,50 +63,50 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Cores para gráficos */
-    --chart-1: 265 60% 70%;
-    --chart-2: 220 70% 65%;
-    --chart-3: 280 50% 60%;
-    --chart-4: 250 55% 75%;
-    --chart-5: 235 65% 68%;
+    --chart-1: 210 35% 25%;
+    --chart-2: 210 30% 40%;
+    --chart-3: 35 40% 65%;
+    --chart-4: 40 35% 75%;
+    --chart-5: 210 25% 55%;
   }
 
   .dark {
-    --background: 250 20% 12%;
-    --foreground: 250 15% 95%;
+    --background: 210 35% 12%;
+    --foreground: 40 35% 92%;
 
-    --card: 250 20% 15%;
-    --card-foreground: 250 15% 95%;
+    --card: 210 30% 15%;
+    --card-foreground: 40 35% 92%;
 
-    --popover: 250 20% 15%;
-    --popover-foreground: 250 15% 95%;
+    --popover: 210 30% 15%;
+    --popover-foreground: 40 35% 92%;
 
-    --primary: 265 60% 70%;
-    --primary-foreground: 250 20% 12%;
-    --primary-light: 265 50% 60%;
-    --primary-dark: 265 70% 80%;
+    --primary: 40 35% 85%;
+    --primary-foreground: 210 35% 12%;
+    --primary-light: 40 30% 75%;
+    --primary-dark: 40 40% 95%;
 
-    --secondary: 250 20% 20%;
-    --secondary-foreground: 250 15% 95%;
+    --secondary: 210 25% 20%;
+    --secondary-foreground: 40 35% 92%;
 
-    --muted: 250 20% 18%;
-    --muted-foreground: 250 10% 65%;
+    --muted: 210 20% 18%;
+    --muted-foreground: 40 20% 70%;
 
-    --accent: 160 45% 50%;
-    --accent-foreground: 160 15% 95%;
+    --accent: 35 30% 50%;
+    --accent-foreground: 40 35% 92%;
 
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 250 15% 25%;
-    --input: 250 15% 25%;
-    --ring: 265 60% 70%;
+    --border: 210 20% 25%;
+    --input: 210 20% 25%;
+    --ring: 40 35% 85%;
     
-    --gradient-primary: linear-gradient(135deg, hsl(265 60% 70%) 0%, hsl(250 55% 60%) 100%);
-    --gradient-calm: linear-gradient(180deg, hsl(250 20% 12%) 0%, hsl(240 20% 15%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(40 35% 85%) 0%, hsl(40 30% 70%) 100%);
+    --gradient-calm: linear-gradient(180deg, hsl(210 35% 12%) 0%, hsl(210 30% 15%) 100%);
     
-    --shadow-soft: 0 4px 20px hsla(265, 60%, 10%, 0.3);
-    --shadow-medium: 0 8px 30px hsla(265, 60%, 10%, 0.4);
-    --shadow-strong: 0 12px 40px hsla(265, 60%, 10%, 0.5);
+    --shadow-soft: 0 4px 20px hsla(210, 35%, 10%, 0.3);
+    --shadow-medium: 0 8px 30px hsla(210, 35%, 10%, 0.4);
+    --shadow-strong: 0 12px 40px hsla(210, 35%, 10%, 0.5);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -118,11 +118,11 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Cores para gráficos (modo escuro) */
-    --chart-1: 265 60% 65%;
-    --chart-2: 220 70% 60%;
-    --chart-3: 280 50% 55%;
-    --chart-4: 250 55% 70%;
-    --chart-5: 235 65% 63%;
+    --chart-1: 40 35% 75%;
+    --chart-2: 40 30% 60%;
+    --chart-3: 35 40% 55%;
+    --chart-4: 210 30% 40%;
+    --chart-5: 210 25% 55%;
   }
 }
 
