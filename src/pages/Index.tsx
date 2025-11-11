@@ -7,7 +7,6 @@ import { Brain, Mail, Lock, Loader2, Sparkles, TrendingUp, Heart } from "lucide-
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import auraNoteLogo from "@/assets/aura-note-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -62,8 +61,11 @@ const Index = () => {
       <section className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary-light/10 flex items-center justify-center p-4">
         <div className="w-full max-w-md animate-fade-in">
           {/* Logo/Brand */}
-          <div className="flex items-center justify-center mb-8">
-            <img src={auraNoteLogo} alt="AURA NOTE" className="h-16 w-auto" />
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="p-3 rounded-2xl bg-background shadow-[var(--shadow-strong)]">
+              <Brain className="h-8 w-8 text-foreground" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
           </div>
 
           {/* Login Card */}
@@ -158,8 +160,8 @@ const Index = () => {
         </h2>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="bg-card p-8 rounded-2xl shadow-[var(--shadow-medium)] border border-border/50 space-y-4 card-hover">
-            <div className="p-3 bg-foreground rounded-xl w-fit">
-              <Brain className="h-6 w-6 text-background" />
+            <div className="p-3 bg-primary/10 rounded-xl w-fit">
+              <Brain className="h-6 w-6 text-primary" />
             </div>
             <h3 className="text-xl font-semibold">Análise Emocional com IA</h3>
             <p className="text-muted-foreground">
