@@ -158,8 +158,8 @@ const Index = () => {
         </h2>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="bg-card p-8 rounded-2xl shadow-[var(--shadow-medium)] border border-border/50 space-y-4 card-hover">
-            <div className="p-3 bg-primary/10 rounded-xl w-fit">
-              <Brain className="h-6 w-6 text-primary" />
+            <div className="p-3 bg-foreground rounded-xl w-fit">
+              <Brain className="h-6 w-6 text-background" />
             </div>
             <h3 className="text-xl font-semibold">Análise Emocional com IA</h3>
             <p className="text-muted-foreground">

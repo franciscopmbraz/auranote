@@ -457,7 +457,9 @@ const Dashboard = () => {
             <Card className="border-border/50">
               <CardContent className="p-12 text-center">
                 <div className="flex flex-col items-center gap-4 text-muted-foreground">
-                  <Brain className="h-12 w-12 opacity-50" />
+                  <div className="p-4 bg-foreground rounded-2xl">
+                    <Brain className="h-12 w-12 text-background" />
+                  </div>
                   <p>Ainda não tem entradas no diário.</p>
                   <p className="text-sm">
                     Comece a escrever para acompanhar o seu estado emocional!
@@ -514,8 +516,10 @@ const Dashboard = () => {
       <AlertDialog open={showEmotionalAlert} onOpenChange={setShowEmotionalAlert}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-warning">
-              <Brain className="h-5 w-5" />
+            <AlertDialogTitle className="flex items-center gap-2">
+              <div className="p-1.5 bg-foreground rounded-lg">
+                <Brain className="h-5 w-5 text-background" />
+              </div>
               Alerta de Bem-Estar Emocional
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-3 pt-2">
