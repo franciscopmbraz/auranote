@@ -268,18 +268,12 @@ const Dashboard = () => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-[var(--shadow-soft)]">
-              <Brain className="h-6 w-6 text-primary-foreground" />
+            <div className="p-2 rounded-xl bg-background shadow-[var(--shadow-soft)]">
+              <Brain className="h-6 w-6 text-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-gradient">Diário Emocional</h1>
+            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
           </div>
           <div className="flex items-center gap-2">
-            {session?.user && (
-              <SummaryDialog 
-                userEmail={session.user.email || ""} 
-                userId={session.user.id}
-              />
-            )}
             <Button
               variant="outline"
               size="sm"
@@ -295,7 +289,7 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
         <Tabs defaultValue="write" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
+          <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto mb-8">
             <TabsTrigger value="write" className="gap-2">
               <PenLine className="h-4 w-4" />
               Escrever
@@ -303,6 +297,10 @@ const Dashboard = () => {
             <TabsTrigger value="dashboard" className="gap-2">
               <BarChart3 className="h-4 w-4" />
               Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="summary" className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Enviar Resumo
             </TabsTrigger>
           </TabsList>
 
@@ -453,6 +451,28 @@ const Dashboard = () => {
 
           <TabsContent value="dashboard">
             <EmotionsDashboard entries={entries} />
+          </TabsContent>
+
+          <TabsContent value="summary">
+            <Card className="shadow-[var(--shadow-medium)] border-border/50">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  <CardTitle>Enviar Resumo</CardTitle>
+                </div>
+                <CardDescription>
+                  Gere e envie um resumo das suas entradas do diário
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {session?.user && (
+                  <SummaryDialog 
+                    userEmail={session.user.email || ""} 
+                    userId={session.user.id}
+                  />
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>

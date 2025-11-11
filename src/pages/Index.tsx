@@ -62,10 +62,10 @@ const Index = () => {
         <div className="w-full max-w-md animate-fade-in">
           {/* Logo/Brand */}
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary-dark shadow-[var(--shadow-strong)]">
-              <Brain className="h-8 w-8 text-primary-foreground" />
+            <div className="p-3 rounded-2xl bg-background shadow-[var(--shadow-strong)]">
+              <Brain className="h-8 w-8 text-foreground" />
             </div>
-            <h1 className="text-2xl font-bold text-gradient">Diário Inteligente</h1>
+            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
           </div>
 
           {/* Login Card */}

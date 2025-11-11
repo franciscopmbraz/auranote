@@ -82,13 +82,13 @@ const Auth = () => {
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         <div className="text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-primary-dark shadow-[var(--shadow-medium)]">
-              <Brain className="h-8 w-8 text-primary-foreground" />
+            <div className="p-3 rounded-2xl bg-background shadow-[var(--shadow-medium)]">
+              <Brain className="h-8 w-8 text-foreground" />
             </div>
             <Sparkles className="h-6 w-6 text-primary animate-pulse" />
           </div>
-          <h1 className="text-3xl font-bold text-gradient mb-2">
-            Diário Emocional
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            AURA NOTE
           </h1>
           <p className="text-muted-foreground">
             Compreenda as suas emoções através da escrita
