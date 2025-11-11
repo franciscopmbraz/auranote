@@ -22,6 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Session } from "@supabase/supabase-js";
+import auraNoteLogo from "@/assets/aura-note-logo.png";
 
 interface DiaryEntryData {
   id: string;
@@ -42,6 +43,7 @@ const Dashboard = () => {
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
   const [showEmotionalAlert, setShowEmotionalAlert] = useState(false);
+  const [silenceTimer, setSilenceTimer] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -69,16 +71,42 @@ const Dashboard = () => {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const rec = new SpeechRecognition();
       rec.lang = 'pt-PT';
-      rec.continuous = false;
-      rec.interimResults = false;
+      rec.continuous = true;
+      rec.interimResults = true;
 
       rec.onresult = (e: any) => {
-        const transcript = e.results[0][0].transcript;
-        setContent(prev => prev ? `${prev} ${transcript}` : transcript);
-        setIsListening(false);
+        const transcript = Array.from(e.results)
+          .map((result: any) => result[0].transcript)
+          .join('');
+        
+        setContent(prev => {
+          const words = prev.split(' ');
+          const lastWord = words[words.length - 1];
+          if (lastWord && transcript.startsWith(lastWord)) {
+            return prev;
+          }
+          return prev ? `${prev} ${transcript}` : transcript;
+        });
+
+        // Clear previous timer
+        if (silenceTimer) {
+          clearTimeout(silenceTimer);
+        }
+
+        // Set new timer for 2 seconds of silence
+        const timer = setTimeout(() => {
+          if (recognition && isListening) {
+            rec.stop();
+          }
+        }, 2000);
+        
+        setSilenceTimer(timer);
       };
 
       rec.onerror = () => {
+        if (silenceTimer) {
+          clearTimeout(silenceTimer);
+        }
         setIsListening(false);
         toast({
           variant: "destructive",
@@ -88,12 +116,21 @@ const Dashboard = () => {
       };
 
       rec.onend = () => {
+        if (silenceTimer) {
+          clearTimeout(silenceTimer);
+        }
         setIsListening(false);
       };
 
       setRecognition(rec);
     }
-  }, [toast]);
+
+    return () => {
+      if (silenceTimer) {
+        clearTimeout(silenceTimer);
+      }
+    };
+  }, [toast, silenceTimer, isListening, recognition]);
 
   const fetchEntries = async () => {
     try {
@@ -268,10 +305,7 @@ const Dashboard = () => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-background shadow-[var(--shadow-soft)]">
-              <Brain className="h-6 w-6 text-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
+            <img src={auraNoteLogo} alt="AURA NOTE" className="h-10 w-auto" />
           </div>
           <div className="flex items-center gap-2">
             <Button
