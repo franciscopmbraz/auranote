@@ -10,6 +10,7 @@ import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3, Mic, MicO
 import DiaryEntry from "@/components/DiaryEntry";
 import EmotionsDashboard from "@/components/EmotionsDashboard";
 import SummaryDialog from "@/components/SummaryDialog";
+import auraNoteLogo from "@/assets/aura-note-logo.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -268,10 +269,7 @@ const Dashboard = () => {
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-background shadow-[var(--shadow-soft)]">
-              <Brain className="h-6 w-6 text-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
+            <img src={auraNoteLogo} alt="AURA NOTE" className="h-10 w-auto" />
           </div>
           <div className="flex items-center gap-2">
             <Button

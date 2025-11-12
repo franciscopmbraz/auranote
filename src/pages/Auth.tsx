@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import auraNoteLogo from "@/assets/aura-note-logo.png";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -82,10 +83,7 @@ const Auth = () => {
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         <div className="text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-2xl bg-background shadow-[var(--shadow-medium)]">
-              <Brain className="h-8 w-8 text-foreground" />
-            </div>
-            <Sparkles className="h-6 w-6 text-primary animate-pulse" />
+            <img src={auraNoteLogo} alt="AURA NOTE" className="h-16 w-auto" />
           </div>
           <h1 className="text-3xl font-bold text-foreground mb-2">
             AURA NOTE

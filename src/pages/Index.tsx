@@ -7,6 +7,7 @@ import { Brain, Mail, Lock, Loader2, Sparkles, TrendingUp, Heart } from "lucide-
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import auraNoteLogo from "@/assets/aura-note-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -61,11 +62,8 @@ const Index = () => {
       <section className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary-light/10 flex items-center justify-center p-4">
         <div className="w-full max-w-md animate-fade-in">
           {/* Logo/Brand */}
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="p-3 rounded-2xl bg-background shadow-[var(--shadow-strong)]">
-              <Brain className="h-8 w-8 text-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">AURA NOTE</h1>
+          <div className="flex items-center justify-center mb-8">
+            <img src={auraNoteLogo} alt="AURA NOTE" className="h-20 w-auto" />
           </div>
 
           {/* Login Card */}
