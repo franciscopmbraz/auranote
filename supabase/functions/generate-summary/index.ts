@@ -39,20 +39,19 @@ serve(async (req) => {
       `Data: ${entry.data}\nConteúdo: ${entry.conteudo}\nTags emocionais: ${entry.tags}\nResumo emocional: ${entry.resumo_emocional}`
     ).join("\n\n");
 
-    const prompt = `Analisa as seguintes entradas de diário emocional do período de ${startDate} a ${endDate} e cria um resumo em HTML profissional e empático.
+    const prompt = `Analisa as seguintes entradas de diário emocional do período de ${startDate} a ${endDate} e cria um resumo profissional e empático em TEXTO SIMPLES.
 
 Entradas:
 ${entriesText}
 
-Cria um resumo em HTML que inclua:
+Cria um resumo em TEXTO SIMPLES (não HTML) que inclua:
 1. Um título com o período analisado
 2. Uma análise do estado emocional geral (parágrafo descritivo começando com "Do dia X a Y estiveste...")
 3. Sugestões práticas e empáticas (começando com "Deves...")
 4. Uma conclusão motivadora
 
-O HTML deve ser bonito e bem formatado, usando tags como <h2>, <h3>, <p>, <ul>, <li>, <strong>, etc.
 Usa um tom profissional mas caloroso e empático.
-NÃO incluas tags <html>, <head> ou <body>, apenas o conteúdo interno.`;
+Usa apenas texto simples com quebras de linha para formatação, sem tags HTML.`;
 
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -100,12 +99,12 @@ NÃO incluas tags <html>, <head> ou <body>, apenas o conteúdo interno.`;
     }
 
     const aiData = await aiResponse.json();
-    const htmlSummary = aiData.choices[0].message.content;
+    const textSummary = aiData.choices[0].message.content;
 
     console.log("Summary generated successfully");
 
     return new Response(
-      JSON.stringify({ htmlSummary }),
+      JSON.stringify({ textSummary }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
