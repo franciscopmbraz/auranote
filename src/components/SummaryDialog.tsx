@@ -11,13 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Send, Loader2 } from "lucide-react";
@@ -33,18 +26,17 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [additionalEmail, setAdditionalEmail] = useState("");
-  const [period, setPeriod] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!period || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       toast({
         variant: "destructive",
         title: "Campos obrigatórios",
-        description: "Por favor preencha todos os campos obrigatórios.",
+        description: "Por favor preencha as datas de início e fim.",
       });
       return;
     }
@@ -63,28 +55,51 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
 
       if (entriesError) throw entriesError;
 
-      // Format entries data for webhook
-      const formattedEntries = entriesData?.map(entry => ({
+      if (!entriesData || entriesData.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Sem entradas",
+          description: "Não existem entradas no período selecionado.",
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Format entries data for AI
+      const formattedEntries = entriesData.map(entry => ({
         data: format(new Date(entry.created_at), "dd/MM/yyyy HH:mm"),
         conteudo: entry.content,
         tags: entry.emotion_tags?.join(", ") || "",
         resumo_emocional: entry.emotion_summary || "",
-      })) || [];
+      }));
+
+      // Generate summary with AI
+      const { data: summaryData, error: summaryError } = await supabase.functions.invoke(
+        "generate-summary",
+        {
+          body: {
+            entries: formattedEntries,
+            startDate: format(new Date(startDate), "dd/MM/yyyy"),
+            endDate: format(new Date(endDate), "dd/MM/yyyy"),
+          },
+        }
+      );
+
+      if (summaryError) throw summaryError;
+
+      const htmlSummary = summaryData.htmlSummary;
 
       // Save to summaries table
-      const summaryData = {
-        user_id: userId,
-        email: userEmail,
-        additional_email: additionalEmail || null,
-        period,
-        start_date: new Date(startDate).toISOString(),
-        end_date: new Date(endDate + "T23:59:59").toISOString(),
-        entries_data: formattedEntries,
-      };
-
       const { error: insertError } = await supabase
         .from("summaries")
-        .insert(summaryData);
+        .insert({
+          user_id: userId,
+          email: userEmail,
+          additional_email: additionalEmail || null,
+          start_date: new Date(startDate).toISOString(),
+          end_date: new Date(endDate + "T23:59:59").toISOString(),
+          html_summary: htmlSummary,
+        });
 
       if (insertError) throw insertError;
 
@@ -92,11 +107,10 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
       const webhookPayload = {
         email_utilizador: userEmail,
         email_adicional: additionalEmail || "",
-        periodo: period,
         data_inicio: format(new Date(startDate), "dd/MM/yyyy"),
         data_fim: format(new Date(endDate), "dd/MM/yyyy"),
         numero_entradas: formattedEntries.length,
-        entradas: formattedEntries,
+        resumo_html: htmlSummary,
       };
 
       await fetch("https://hook.eu2.make.com/53bu39ofylckir9f8kp263jeebdlzdaq", {
@@ -116,7 +130,6 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
       setOpen(false);
       // Reset form
       setAdditionalEmail("");
-      setPeriod("");
       setStartDate("");
       setEndDate("");
     } catch (error: any) {
@@ -170,23 +183,6 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
                 value={additionalEmail}
                 onChange={(e) => setAdditionalEmail(e.target.value)}
               />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="period">Período *</Label>
-              <Select value={period} onValueChange={setPeriod}>
-                <SelectTrigger id="period">
-                  <SelectValue placeholder="Selecione o período" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Diário">Diário</SelectItem>
-                  <SelectItem value="Semanal">Semanal</SelectItem>
-                  <SelectItem value="Quinzenal">Quinzenal</SelectItem>
-                  <SelectItem value="Mensal">Mensal</SelectItem>
-                  <SelectItem value="Trimestral">Trimestral</SelectItem>
-                  <SelectItem value="Anual">Anual</SelectItem>
-                  <SelectItem value="Personalizado">Personalizado</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="start-date">Data de início *</Label>
