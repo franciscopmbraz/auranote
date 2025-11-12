@@ -87,7 +87,7 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
 
       if (summaryError) throw summaryError;
 
-      const htmlSummary = summaryData.htmlSummary;
+      const textSummary = summaryData.textSummary;
 
       // Save to summaries table
       const { error: insertError } = await supabase
@@ -98,19 +98,23 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
           additional_email: additionalEmail || null,
           start_date: new Date(startDate).toISOString(),
           end_date: new Date(endDate + "T23:59:59").toISOString(),
-          html_summary: htmlSummary,
-        });
+          html_summary: textSummary,
+        } as any);
 
       if (insertError) throw insertError;
 
       // Send to Make.com webhook
       const webhookPayload = {
-        email_utilizador: userEmail,
-        email_adicional: additionalEmail || "",
-        data_inicio: format(new Date(startDate), "dd/MM/yyyy"),
-        data_fim: format(new Date(endDate), "dd/MM/yyyy"),
-        numero_entradas: formattedEntries.length,
-        resumo_html: htmlSummary,
+        emails: {
+          email_utilizador: userEmail,
+          email_adicional: additionalEmail || "",
+        },
+        periodo: {
+          data_inicio: format(new Date(startDate), "dd/MM/yyyy"),
+          data_fim: format(new Date(endDate), "dd/MM/yyyy"),
+          numero_entradas: formattedEntries.length,
+        },
+        resumo: textSummary,
       };
 
       await fetch("https://hook.eu2.make.com/53bu39ofylckir9f8kp263jeebdlzdaq", {
