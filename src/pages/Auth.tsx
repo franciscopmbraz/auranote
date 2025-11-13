@@ -12,7 +12,6 @@ import auraNoteLogo from "@/assets/aura-note-logo.png";
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [showForm, setShowForm] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -94,96 +93,66 @@ const Auth = () => {
           </p>
         </div>
 
-        {!showForm ? (
-          <Card className="shadow-[var(--shadow-medium)] border-border/50">
-            <CardHeader>
-              <CardTitle>Bem-vindo</CardTitle>
-              <CardDescription>
-                Escolha uma opção para continuar
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
+        <Card className="shadow-[var(--shadow-medium)] border-border/50">
+          <CardHeader>
+            <CardTitle>{isLogin ? "Entrar" : "Criar Conta"}</CardTitle>
+            <CardDescription>
+              {isLogin
+                ? "Entre na sua conta para continuar"
+                : "Crie uma conta para começar a refletir"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleAuth} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="transition-all focus:shadow-[var(--shadow-soft)]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Palavra-passe</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="transition-all focus:shadow-[var(--shadow-soft)]"
+                />
+              </div>
+
               <Button
-                onClick={() => {
-                  setIsLogin(true);
-                  setShowForm(true);
-                }}
+                type="submit"
                 className="w-full bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)]"
+                disabled={loading}
               >
-                Entrar
+                {loading ? "A processar..." : isLogin ? "Entrar" : "Criar Conta"}
               </Button>
-              <Button
-                onClick={() => {
-                  setIsLogin(false);
-                  setShowForm(true);
-                }}
-                variant="outline"
-                className="w-full"
-              >
-                Criar Conta
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="shadow-[var(--shadow-medium)] border-border/50">
-            <CardHeader>
-              <CardTitle>{isLogin ? "Entrar" : "Criar Conta"}</CardTitle>
-              <CardDescription>
-                {isLogin
-                  ? "Entre na sua conta para continuar"
-                  : "Crie uma conta para começar a refletir"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleAuth} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="transition-all focus:shadow-[var(--shadow-soft)]"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="password">Palavra-passe</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="transition-all focus:shadow-[var(--shadow-soft)]"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-primary to-primary-dark hover:opacity-90 transition-all duration-300 shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)]"
-                  disabled={loading}
+              <div className="text-center text-sm">
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary hover:text-primary-dark transition-colors underline-offset-4 hover:underline"
                 >
-                  {loading ? "A processar..." : isLogin ? "Entrar" : "Criar Conta"}
-                </Button>
-
-                <div className="text-center text-sm">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="text-primary hover:text-primary-dark transition-colors underline-offset-4 hover:underline"
-                  >
-                    Voltar
-                  </button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
+                  {isLogin
+                    ? "Ainda não tem conta? Criar conta"
+                    : "Já tem conta? Entrar"}
+                </button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
