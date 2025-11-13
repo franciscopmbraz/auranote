@@ -105,15 +105,10 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
 
       // Send to Make.com webhook
       const webhookPayload = {
-        emails: {
-          email_utilizador: userEmail,
-          email_adicional: additionalEmail || "",
-        },
-        periodo: {
-          data_inicio: format(new Date(startDate), "dd/MM/yyyy"),
-          data_fim: format(new Date(endDate), "dd/MM/yyyy"),
-          numero_entradas: formattedEntries.length,
-        },
+        email_utilizador: userEmail,
+        email_adicional: additionalEmail || "",
+        data_inicio: format(new Date(startDate), "dd/MM/yyyy"),
+        data_fim: format(new Date(endDate), "dd/MM/yyyy"),
         resumo: textSummary,
       };
 
