@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, Share2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface SummaryDialogProps {
@@ -28,6 +28,11 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
   const [additionalEmail, setAdditionalEmail] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [lastSummary, setLastSummary] = useState<{
+    inicio: string;
+    fim: string;
+    resumo: string;
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,6 +126,13 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
         body: JSON.stringify(webhookPayload),
       });
 
+      // Save summary data for sharing
+      setLastSummary({
+        inicio: format(new Date(startDate), "dd/MM/yyyy"),
+        fim: format(new Date(endDate), "dd/MM/yyyy"),
+        resumo: textSummary,
+      });
+
       toast({
         title: "Resumo enviado!",
         description: "O resumo foi guardado e enviado com sucesso.",
@@ -143,8 +155,44 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
     }
   };
 
+  const handleShare = () => {
+    if (!lastSummary) {
+      toast({
+        variant: "destructive",
+        title: "Sem resumo disponível",
+        description: "Primeiro precisa gerar um resumo.",
+      });
+      return;
+    }
+
+    const shareUrl = `${window.location.origin}/partilha?inicio=${encodeURIComponent(lastSummary.inicio)}&fim=${encodeURIComponent(lastSummary.fim)}&resumo=${encodeURIComponent(lastSummary.resumo)}`;
+    
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast({
+        title: "Link copiado!",
+        description: "Link de partilha copiado para o clipboard.",
+      });
+    }).catch(() => {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Não foi possível copiar o link.",
+      });
+    });
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
+      <Button
+        variant="outline"
+        className="gap-2"
+        onClick={handleShare}
+        disabled={!lastSummary}
+      >
+        <Share2 className="h-4 w-4" />
+        Partilhar
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -230,6 +278,7 @@ const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
         </form>
       </DialogContent>
     </Dialog>
+    </>
   );
 };
 
