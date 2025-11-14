@@ -35,6 +35,12 @@ All colors MUST be HSL.
     --accent: 35 40% 75%;
     --accent-foreground: 210 35% 17%;
 
+    /* Cores adicionais para ícones decorativos */
+    --decorative-1: 25 50% 70%;
+    --decorative-2: 200 30% 45%;
+    --decorative-3: 45 45% 65%;
+    --decorative-4: 190 35% 50%;
+
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
@@ -93,6 +99,12 @@ All colors MUST be HSL.
 
     --accent: 35 30% 50%;
     --accent-foreground: 40 35% 92%;
+
+    /* Cores adicionais para ícones decorativos (modo escuro) */
+    --decorative-1: 25 45% 60%;
+    --decorative-2: 200 35% 55%;
+    --decorative-3: 45 40% 60%;
+    --decorative-4: 190 40% 55%;
 
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
