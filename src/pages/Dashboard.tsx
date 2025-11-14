@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3, Mic, MicOff } from "lucide-react";
+import { Brain, LogOut, PenLine, Sparkles, Loader2, Trash2, BarChart3, Mic, MicOff, Share2 } from "lucide-react";
 import DiaryEntry from "@/components/DiaryEntry";
 import EmotionsDashboard from "@/components/EmotionsDashboard";
 import SummaryDialog from "@/components/SummaryDialog";
@@ -43,6 +43,11 @@ const Dashboard = () => {
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
   const [showEmotionalAlert, setShowEmotionalAlert] = useState(false);
+  const [lastSummary, setLastSummary] = useState<{
+    inicio: string;
+    fim: string;
+    resumo: string;
+  } | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -264,6 +269,32 @@ const Dashboard = () => {
     }
   };
 
+  const handleShare = () => {
+    if (!lastSummary) {
+      toast({
+        variant: "destructive",
+        title: "Sem resumo disponível",
+        description: "Primeiro precisa gerar um resumo.",
+      });
+      return;
+    }
+
+    const shareUrl = `${window.location.origin}/partilha?inicio=${encodeURIComponent(lastSummary.inicio)}&fim=${encodeURIComponent(lastSummary.fim)}&resumo=${encodeURIComponent(lastSummary.resumo)}`;
+    
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast({
+        title: "Link copiado!",
+        description: "Link de partilha copiado para o clipboard.",
+      });
+    }).catch(() => {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Não foi possível copiar o link.",
+      });
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-secondary/20 to-background">
       <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-10">
@@ -462,12 +493,24 @@ const Dashboard = () => {
                   Gere e envie um resumo das suas entradas do diário
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex gap-2">
                 {session?.user && (
-                  <SummaryDialog 
-                    userEmail={session.user.email || ""} 
-                    userId={session.user.id}
-                  />
+                  <>
+                    <SummaryDialog 
+                      userEmail={session.user.email || ""} 
+                      userId={session.user.id}
+                      onSummaryGenerated={setLastSummary}
+                    />
+                    <Button
+                      variant="outline"
+                      className="gap-2"
+                      onClick={handleShare}
+                      disabled={!lastSummary}
+                    >
+                      <Share2 className="h-4 w-4" />
+                      Partilhar
+                    </Button>
+                  </>
                 )}
               </CardContent>
             </Card>
