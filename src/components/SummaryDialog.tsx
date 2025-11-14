@@ -19,10 +19,9 @@ import { format } from "date-fns";
 interface SummaryDialogProps {
   userEmail: string;
   userId: string;
-  onSummaryGenerated?: (summary: { inicio: string; fim: string; resumo: string }) => void;
 }
 
-const SummaryDialog = ({ userEmail, userId, onSummaryGenerated }: SummaryDialogProps) => {
+const SummaryDialog = ({ userEmail, userId }: SummaryDialogProps) => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -121,15 +120,6 @@ const SummaryDialog = ({ userEmail, userId, onSummaryGenerated }: SummaryDialogP
         mode: "no-cors",
         body: JSON.stringify(webhookPayload),
       });
-
-      // Notify parent component about the generated summary
-      if (onSummaryGenerated) {
-        onSummaryGenerated({
-          inicio: format(new Date(startDate), "dd/MM/yyyy"),
-          fim: format(new Date(endDate), "dd/MM/yyyy"),
-          resumo: textSummary,
-        });
-      }
 
       toast({
         title: "Resumo enviado!",
