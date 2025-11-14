@@ -90,7 +90,7 @@ const Index = () => {
             className="bg-primary text-primary-foreground hover:opacity-90 text-lg px-8 py-6 shadow-[var(--shadow-medium)]"
           >
             <Sparkles className="mr-2 h-5 w-5" />
-            Começar Gratuitamente
+            Começar Agora
           </Button>
         </div>
       </section>
@@ -211,7 +211,7 @@ const Index = () => {
             className="bg-primary text-primary-foreground hover:opacity-90 text-lg px-10 py-7 shadow-[var(--shadow-medium)]"
           >
             <Sparkles className="mr-2 h-5 w-5" />
-            Começar Gratuitamente
+            Começar Agora
           </Button>
         </div>
       </section>
