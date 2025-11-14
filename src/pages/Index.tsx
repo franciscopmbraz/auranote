@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Brain, Sparkles, TrendingUp, Heart, BookOpen, Pen, Notebook, FileText, Pencil, BookMarked } from "lucide-react";
+import { Brain, Sparkles, TrendingUp, Heart, BookOpen, Pen, Notebook, FileText, Pencil, BookMarked, Mail, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import auraNoteLogo from "@/assets/aura-note-logo.png";
@@ -215,6 +215,95 @@ const Index = () => {
           </Button>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border/30 bg-background/50 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-12">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-6 h-6 text-primary" />
+                <span className="font-bold text-lg">AURA NOTE</span>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                Compreenda as suas emoções através da escrita
+              </p>
+            </div>
+
+            {/* Links */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Produto</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#features" className="text-muted-foreground hover:text-primary transition-colors">
+                    Funcionalidades
+                  </a>
+                </li>
+                <li>
+                  <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
+                    Como Funciona
+                  </a>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/auth")} className="text-muted-foreground hover:text-primary transition-colors">
+                    Entrar
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Recursos</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    Ajuda
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    Privacidade
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact & Social */}
+            <div>
+              <h3 className="font-semibold mb-4 text-foreground">Contacto</h3>
+              <div className="space-y-3">
+                <a href="mailto:ola@auranote.com" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                  <Mail className="w-4 h-4" />
+                  ola@auranote.com
+                </a>
+                <div className="flex gap-3 pt-2">
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="pt-8 border-t border-border/30 text-center text-sm text-muted-foreground">
+            <p>© 2024 AURA NOTE. Todos os direitos reservados.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
