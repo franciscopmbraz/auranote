@@ -76,9 +76,8 @@ export type Database = {
           created_at: string
           email: string
           end_date: string
-          entries_data: Json
+          html_summary: string | null
           id: string
-          period: string
           start_date: string
           updated_at: string
           user_id: string
@@ -88,9 +87,8 @@ export type Database = {
           created_at?: string
           email: string
           end_date: string
-          entries_data: Json
+          html_summary?: string | null
           id?: string
-          period: string
           start_date: string
           updated_at?: string
           user_id: string
@@ -100,9 +98,8 @@ export type Database = {
           created_at?: string
           email?: string
           end_date?: string
-          entries_data?: Json
+          html_summary?: string | null
           id?: string
-          period?: string
           start_date?: string
           updated_at?: string
           user_id?: string
