@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { TrendingUp, Calendar, Heart, Smile } from "lucide-react";
 import { format, subDays } from "date-fns";
 import { pt } from "date-fns/locale";
@@ -161,16 +161,18 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={stats.lineData}>
+              <BarChart data={stats.lineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis 
                   dataKey="date" 
                   style={{ fontSize: "12px" }}
                   stroke="hsl(var(--muted-foreground))"
+                  label={{ value: 'Dias', position: 'insideBottom', offset: -5, style: { fontSize: '12px', fill: 'hsl(var(--muted-foreground))' } }}
                 />
                 <YAxis 
                   style={{ fontSize: "12px" }}
                   stroke="hsl(var(--muted-foreground))"
+                  label={{ value: 'Emoções', angle: -90, position: 'insideLeft', style: { fontSize: '12px', fill: 'hsl(var(--muted-foreground))' } }}
                 />
                 <Tooltip 
                   contentStyle={{
@@ -182,17 +184,15 @@ const EmotionsDashboard = ({ entries }: EmotionsDashboardProps) => {
                 />
                 <Legend wrapperStyle={{ fontSize: "12px" }} />
                 {topEmotions.map((emotion) => (
-                  <Line
+                  <Bar
                     key={emotion}
-                    type="monotone"
                     dataKey={emotion}
-                    stroke={EMOTION_COLORS[emotion] || EMOTION_COLORS.default}
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
+                    fill={EMOTION_COLORS[emotion] || EMOTION_COLORS.default}
                     name={emotion.charAt(0).toUpperCase() + emotion.slice(1)}
+                    stackId="emotions"
                   />
                 ))}
-              </LineChart>
+              </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
